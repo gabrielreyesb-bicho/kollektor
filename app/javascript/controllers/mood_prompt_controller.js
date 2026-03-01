@@ -1,47 +1,24 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["modal", "recommendationsContainer", "genreSelect", "refreshButtonContainer"]
+  static targets = ["modal", "recommendationsContainer", "refreshButtonContainer"]
 
   connect() {
-    this.modalTarget.addEventListener('show.bs.modal', this.clearRecommendations.bind(this))
-  }
-
-  clearRecommendations() {
-    this.recommendationsContainerTarget.innerHTML = ''
-    this.genreSelectTarget.value = ''
-    this.refreshButtonContainerTarget.style.display = 'none'
-  }
-
-  async selectGenre(event) {
-    const genreId = this.genreSelectTarget.value
-    
-    if (!genreId) {
-      this.recommendationsContainerTarget.innerHTML = ''
-      this.refreshButtonContainerTarget.style.display = 'none'
-      return
-    }
-
-    await this.fetchRecommendations(genreId)
+    this.modalTarget.addEventListener('show.bs.modal', () => {
+      this.fetchRecommendations()
+    })
   }
 
   async refreshSuggestions() {
-    const genreId = this.genreSelectTarget.value
-    if (genreId) {
-      await this.fetchRecommendations(genreId)
-    }
+    await this.fetchRecommendations()
   }
 
-  async fetchRecommendations(genreId) {
+  async fetchRecommendations() {
     try {
-      let url = `/api/recommendations/by_genre/`
-      if (genreId === 'random') {
-        url += 'random'
-      } else {
-        url += genreId
-      }
+      this.recommendationsContainerTarget.innerHTML = '<div class="text-center"><div class="spinner-border text-primary" role="status"></div><p class="mt-2">Finding great music for you...</p></div>'
+      this.refreshButtonContainerTarget.style.display = 'none'
 
-      const response = await fetch(url)
+      const response = await fetch('/api/recommendations/by_genre/random')
       
       if (!response.ok) {
         throw new Error('Network response was not ok')
@@ -58,7 +35,7 @@ export default class extends Controller {
           <small class="text-muted">${error.message}</small>
         </div>
       `
-      this.refreshButtonContainerTarget.style.display = 'none'
+      this.refreshButtonContainerTarget.style.display = 'block'
     }
   }
 } 

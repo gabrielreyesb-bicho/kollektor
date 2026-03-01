@@ -58,8 +58,7 @@
                       params: {
                         random_selection: @random_selection,
                         recommended_ids: @recommended_albums.map(&:id).join(',')
-                      },
-                      remote: true do %>
+                      } do %>
                     <i class="bi bi-hand-thumbs-up-fill"></i>
                     <span class="ms-1"><%= album.likes_count %></span>
                   <% end %>

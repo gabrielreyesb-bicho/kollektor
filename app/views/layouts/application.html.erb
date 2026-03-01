@@ -119,7 +119,7 @@
     <% end %>
 
     <!-- Mood Modal -->
-    <% if user_signed_in? && !current_page?(root_path) && @genres.present? %>
+    <% if user_signed_in? && !current_page?(root_path) %>
       <div data-controller="mood-prompt">
         <div class="modal fade" 
              id="suggestionsModal"
@@ -134,20 +134,8 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
               </div>
               <div class="modal-body">
-                <div class="mb-4">
-                  <label class="form-label">Select a genre:</label>
-                  <select class="form-select bg-dark text-white border-secondary" 
-                          data-mood-prompt-target="genreSelect"
-                          data-action="change->mood-prompt#selectGenre">
-                    <option value="">Choose a genre...</option>
-                    <option value="random">🎲 Surprise me!</option>
-                    <%= options_from_collection_for_select(@genres.order(:name), :id, :name) %>
-                  </select>
-                </div>
-                
                 <div data-mood-prompt-target="recommendationsContainer"></div>
 
-                <!-- Add this button container -->
                 <div data-mood-prompt-target="refreshButtonContainer" style="display: none;" class="text-center mt-4">
                   <button class="btn btn-primary" data-action="click->mood-prompt#refreshSuggestions">
                     <i class="bi bi-shuffle me-2"></i>New Suggestions

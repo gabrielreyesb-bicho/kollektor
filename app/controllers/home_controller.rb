@@ -43,20 +43,10 @@ class HomeController < ApplicationController
   end
 
   def get_random_recommendations
-    recommended_albums = []
-    
-    # Get 4 random albums, favoring less liked ones
-    4.times do
-      # Get any random album we haven't selected yet, favoring less liked ones
-      album = current_user.albums.includes(:author, :genre).with_attached_cover_image
-                  .where.not(id: recommended_albums.map(&:id))
-                  .weighted_by_likes
-                  .first
-      
-      recommended_albums << album if album
-    end
-
-    recommended_albums
+    current_user.albums.includes(:author, :genre).with_attached_cover_image
+                .weighted_by_likes
+                .limit(4)
+                .to_a
   end
 
   def get_title

@@ -46,7 +46,8 @@ class Album < ApplicationRecord
   }
 
   def increment_likes
-    increment!(:likes_count)
+    self.class.increment_counter(:likes_count, id)
+    reload
   end
 
   def youtube_music_url
