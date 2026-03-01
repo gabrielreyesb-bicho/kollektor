@@ -21,7 +21,7 @@ test:
   database: kollektor_test
 
 production:
-  <<: *default
-  database: kollektor_production
-  username: kollektor
-  password: <%= ENV["KOLLEKTOR_DATABASE_PASSWORD"] %>
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  url: <%= ENV["DATABASE_URL"] %>
