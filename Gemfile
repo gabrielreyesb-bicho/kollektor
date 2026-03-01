@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-ruby "3.2.8"
+ruby "3.2.9"
 gem "rails", "~> 7.1.5", ">= 7.1.5.1"
 gem "sprockets-rails"
 gem "sqlite3", ">= 1.4"
