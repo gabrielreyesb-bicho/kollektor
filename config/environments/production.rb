@@ -12,7 +12,7 @@ Kollektor::Application.configure do
   config.assets.digest = true
   
   # Active Storage
-  config.active_storage.service = :amazon
+  config.active_storage.service = :local
   config.active_storage.replace_on_assign_to_many = false
   
   # Set the host for URL generation
