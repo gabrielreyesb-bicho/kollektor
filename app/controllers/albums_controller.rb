@@ -8,6 +8,7 @@ class AlbumsController < ApplicationController
     @albums = current_user.albums.includes(:genre, :author)
     @albums = @albums.search(params[:search]) if params[:search].present?
     @albums = @albums.order(:name)
+    puts "DEBUG_DB_URL: #{ENV['DATABASE_URL']}"
   end
 
   def show
