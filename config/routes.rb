@@ -17,6 +17,11 @@ end
   get 'actors/update'
   get 'actors/destroy'
   get 'series_collection/index'
+  
+  # Endpoints para exportar datos (antes de devise para evitar problemas de autenticación)
+  get 'data_export/check', to: 'data_export#check_data'
+  get 'data_export/all', to: 'data_export#export_all'
+  
   devise_for :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -71,8 +76,4 @@ end
   end
 
   get 'statistics', to: 'statistics#index'
-  
-  # Endpoints para exportar datos (protegidos con token)
-  get 'data_export/check', to: 'data_export#check_data'
-  get 'data_export/all', to: 'data_export#export_all'
 end

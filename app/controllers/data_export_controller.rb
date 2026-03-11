@@ -18,8 +18,27 @@ class DataExportController < ApplicationController
       notifications: Notification.count,
       active_storage_attachments: ActiveStorage::Attachment.count,
       active_storage_blobs: ActiveStorage::Blob.count,
-      database_url: ENV['DATABASE_URL']&.gsub(/:[^:@]+@/, ':****@') || 'No configurada'
+      database_url: ENV['DATABASE_URL']&.gsub(/:[^:@]+@/, ':****@') || 'No configurada',
+      is_render_db: ENV['DATABASE_URL']&.include?('dpg-') || false,
+      is_heroku_db: ENV['DATABASE_URL']&.include?('amazonaws') || ENV['DATABASE_URL']&.include?('ec2-') || false
     }
+    
+    # Buscar variables de entorno que puedan tener la URL de Heroku
+    heroku_vars = ENV.to_h.select do |k, v|
+      v.to_s.downcase.include?('heroku') || 
+      v.to_s.include?('amazonaws') ||
+      v.to_s.include?('ec2-') ||
+      (k.to_s.downcase.include?('heroku') && v.to_s.start_with?('postgres'))
+    end
+    
+    if heroku_vars.any?
+      data_summary[:possible_heroku_vars] = heroku_vars.map do |key, value|
+        {
+          key: key,
+          value: value.to_s.start_with?('postgres') ? value.gsub(/:[^:@]+@/, ':****@') : value
+        }
+      end
+    end
     
     render json: data_summary
   end
