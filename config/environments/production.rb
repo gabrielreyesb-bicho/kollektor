@@ -16,15 +16,18 @@ Kollektor::Application.configure do
   config.active_storage.replace_on_assign_to_many = false
   
   # Set the host for URL generation
-  Rails.application.routes.default_url_options[:host] = 'kollektor-611834243c86.herokuapp.com'
-  config.action_controller.default_url_options = { host: 'kollektor-611834243c86.herokuapp.com' }
+  # Usa la variable HOST si existe, o el dominio automático de Render
+  host = ENV['HOST'] || ENV['RENDER_EXTERNAL_HOSTNAME'] || 'localhost'
+
+  Rails.application.routes.default_url_options[:host] = host
+  config.action_controller.default_url_options = { host: host }
   
   # Force SSL
   config.force_ssl = true
   
   # Active Storage URL generation
   config.active_storage.resolve_model_to_route = :rails_storage_proxy
-  config.active_storage.default_url_options = { host: 'kollektor-611834243c86.herokuapp.com', protocol: 'https' }
+  config.active_storage.default_url_options = { host: host, protocol: 'https' }
 
   config.logger = ActiveSupport::Logger.new(STDOUT)
     .tap  { |logger| logger.formatter = ::Logger::Formatter.new }

@@ -71,4 +71,8 @@ end
   end
 
   get 'statistics', to: 'statistics#index'
+  
+  # Endpoints para exportar datos (protegidos con token)
+  get 'data_export/check', to: 'data_export#check_data'
+  get 'data_export/all', to: 'data_export#export_all'
 end
