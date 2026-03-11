@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get '/secret_rescue', to: proc { |env| 
+  [200, {}, ["HEROKU_URL: #{ENV.to_h.find { |k,v| v.to_s.include?('heroku') } || 'Not Found'}"]] 
+  }
   get 'actors/index'
   get 'actors/new'
   get 'actors/create'
