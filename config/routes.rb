@@ -1,7 +1,15 @@
 Rails.application.routes.draw do
-  get '/secret_rescue', to: proc { |env| 
-  [200, {}, ["HEROKU_URL: #{ENV.to_h.find { |k,v| v.to_s.include?('heroku') } || 'Not Found'}"]] 
-  }
+  # En config/routes.rb, al principio:
+get '/export_data', to: proc { |env|
+begin
+  # Intentamos sacar los álbumes. 
+  # Si la app en Render tiene acceso a la DB de Heroku, esto los mostrará.
+  data = Album.all.as_json(include: [:artist, :genre]) 
+  [200, { 'Content-Type' => 'application/json' }, [JSON.pretty_generate(data)]]
+rescue => e
+  [500, { 'Content-Type' => 'text/plain' }, ["Error: #{e.message}"]]
+end
+}
   get 'actors/index'
   get 'actors/new'
   get 'actors/create'
