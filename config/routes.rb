@@ -21,6 +21,9 @@ end
   # Endpoints para exportar datos (antes de devise para evitar problemas de autenticación)
   get 'data_export/check', to: 'data_export#check_data'
   get 'data_export/all', to: 'data_export#export_all'
+  # Rutas cortas para facilitar acceso
+  get 'check', to: 'data_export#check_data'
+  get 'export', to: 'data_export#export_all'
   
   devise_for :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
