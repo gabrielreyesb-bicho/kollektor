@@ -25,4 +25,7 @@ module Kollektor
   puts "========================================"
   puts "DATABASE_URL: #{ENV['DATABASE_URL']}"
   puts "========================================"
+  puts "=== TODAS LAS VARIABLES ==="
+  ENV.each { |k, v| puts "#{k}: #{v}" if v.start_with?("postgres") }
+  puts "==========================="
 end
