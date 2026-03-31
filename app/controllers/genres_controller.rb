@@ -79,6 +79,6 @@ class GenresController < ApplicationController
     end
 
     def genre_params
-      params.require(:genre).permit(:name, :description, :collection_type_id)
+      params.require(:genre).permit(:name, :description, :collection_type_id, :image)
     end
 end 

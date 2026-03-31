@@ -1,0 +1,29 @@
+<div class="mosaic-container">
+  <div class="mosaic-header">
+    <h1 class="mosaic-page-title">Your Music Genres</h1>
+    <p class="text-muted">Choose a genre to explore your collection</p>
+  </div>
+
+  <% if @genres.any? %>
+    <div class="mosaic-grid">
+      <% @genres.each do |genre| %>
+        <%= render 'mosaic_card', 
+                   title: genre.name,
+                   url: music_genre_path(genre),
+                   image: genre.image,
+                   fallback_icon: "bi-music-note-list" %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="empty-state text-center py-5">
+      <div class="display-6 text-muted mb-4">
+        <i class="bi bi-music-note-list" style="font-size: 4rem;"></i>
+      </div>
+      <h3 class="text-muted mb-4">No genres found</h3>
+      <p class="text-muted mb-4">Start by creating your first genre to organize your music collection.</p>
+      <%= link_to genres_path, class: "btn btn-primary" do %>
+        <i class="bi bi-plus-lg me-2"></i>Manage Genres
+      <% end %>
+    </div>
+  <% end %>
+</div>

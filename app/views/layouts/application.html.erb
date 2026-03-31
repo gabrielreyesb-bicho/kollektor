@@ -31,6 +31,100 @@
       <% if current_page?(root_path) %>
         <!-- Collections Dashboard - No Sidebar -->
         <%= yield %>
+      <% elsif mosaic_view? %>
+        <!-- Mosaic Views - Full Width Without Sidebar -->
+        <div class="main-content-full" data-controller="mosaic-menu">
+          <!-- Navbar for mosaic views -->
+          <nav class="navbar navbar-dark bg-primary fixed-top mosaic-navbar">
+            <div class="container-fluid">
+              <div class="d-flex align-items-center">
+                <%= image_tag "logo.png", style: "height: 24px; width: auto;" %>
+                <span class="ms-2 text-white fw-bold">Kollektor</span>
+              </div>
+              
+              <!-- Menu button -->
+              <button class="btn btn-link text-white" 
+                      type="button"
+                      data-action="click->mosaic-menu#toggle"
+                      aria-label="Menu">
+                <i class="bi bi-three-dots-vertical" style="font-size: 1.5rem;"></i>
+              </button>
+            </div>
+          </nav>
+          
+          <!-- Mosaic Menu Overlay -->
+          <div class="mosaic-menu-overlay" 
+               data-mosaic-menu-target="overlay"
+               data-action="click->mosaic-menu#close"
+               role="dialog"
+               aria-modal="true"
+               aria-label="Navigation menu">
+            <div class="mosaic-menu-content" 
+                 data-action="click->mosaic-menu#stopPropagation"
+                 role="document">
+              <div class="mosaic-menu-header">
+                <h3 class="mb-0">Manage Collections</h3>
+                <button class="btn btn-link text-white" 
+                        data-action="click->mosaic-menu#close"
+                        aria-label="Close menu">
+                  <i class="bi bi-x-lg" style="font-size: 1.5rem;"></i>
+                </button>
+              </div>
+              
+              <nav class="mosaic-menu-body" aria-label="Main navigation">
+                <ul class="nav flex-column gap-2">
+                  <li class="nav-item">
+                    <%= link_to statistics_path, class: "mosaic-menu-link" do %>
+                      <i class="bi bi-graph-up me-3"></i>
+                      <span>Statistics</span>
+                    <% end %>
+                  </li>
+                  <li class="nav-item">
+                    <a href="#" class="mosaic-menu-link" data-bs-toggle="modal" data-bs-target="#suggestionsModal">
+                      <i class="bi bi-lightbulb me-3"></i>
+                      <span>Get Suggestions</span>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <%= link_to get_lucky_path, class: "mosaic-menu-link" do %>
+                      <i class="bi bi-shuffle me-3"></i>
+                      <span>Get Lucky</span>
+                    <% end %>
+                  </li>
+                  
+                  <li class="mosaic-menu-divider" role="separator"></li>
+                  
+                  <li class="nav-item">
+                    <%= link_to genres_path, class: "mosaic-menu-link" do %>
+                      <i class="bi bi-music-note-list me-3"></i>
+                      <span>Manage Genres</span>
+                    <% end %>
+                  </li>
+                  <li class="nav-item">
+                    <%= link_to authors_path, class: "mosaic-menu-link" do %>
+                      <i class="bi bi-person me-3"></i>
+                      <span>Manage Authors</span>
+                    <% end %>
+                  </li>
+                  <li class="nav-item">
+                    <%= link_to albums_path, class: "mosaic-menu-link" do %>
+                      <i class="bi bi-disc me-3"></i>
+                      <span>Manage Albums</span>
+                    <% end %>
+                  </li>
+                  <li class="nav-item">
+                    <%= link_to countries_path, class: "mosaic-menu-link" do %>
+                      <i class="bi bi-globe me-3"></i>
+                      <span>Manage Countries</span>
+                    <% end %>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+          
+          <%= yield %>
+        </div>
       <% else %>
         <!-- Collection Pages - With Sidebar -->
         <div class="d-flex min-vh-100" data-controller="sidebar">

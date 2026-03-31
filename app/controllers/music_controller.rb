@@ -1,6 +1,49 @@
 class MusicController < ApplicationController
   include MusicSidebarData
 
+  # Mosaic navigation actions
+  def genres_mosaic
+    # Load all genres for current user, ordered alphabetically
+    @genres = current_user.genres
+                          .by_collection_type('Music')
+                          .with_attached_image
+                          .order(:name)
+  end
+
+  def authors_mosaic
+    # Load genre by ID
+    @genre = Genre.find(params[:genre_id])
+    
+    # Verify access
+    unless @genre.user == current_user || @genre.user.nil?
+      flash[:alert] = "You are not authorized to access this genre"
+      redirect_to music_path and return
+    end
+    
+    # Load all authors for that genre, ordered alphabetically
+    @authors = @genre.authors
+                     .with_attached_image
+                     .includes(:country)
+                     .order(:name)
+  end
+
+  def albums_mosaic
+    # Load author by ID
+    @author = Author.find(params[:author_id])
+    @genre = @author.genre
+    
+    # Verify access
+    unless @author.user == current_user || @author.user.nil?
+      flash[:alert] = "You are not authorized to access this author"
+      redirect_to music_path and return
+    end
+    
+    # Load all albums for that author, ordered by year ASC
+    @albums = @author.albums
+                     .with_attached_cover_image
+                     .order(year: :asc)
+  end
+
   def index
     load_albums
     

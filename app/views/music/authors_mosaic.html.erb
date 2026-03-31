@@ -1,0 +1,38 @@
+<div class="mosaic-container">
+  <!-- Breadcrumb navigation -->
+  <div class="mosaic-breadcrumb">
+    <%= link_to music_path do %>
+      <i class="bi bi-arrow-left"></i>
+      <span>Genres</span>
+    <% end %>
+  </div>
+
+  <div class="mosaic-header">
+    <h1 class="mosaic-page-title"><%= @genre.name %></h1>
+    <p class="text-muted">Select an author to view their albums</p>
+  </div>
+
+  <% if @authors.any? %>
+    <div class="mosaic-grid">
+      <% @authors.each do |author| %>
+        <%= render 'mosaic_card', 
+                   title: author.name,
+                   url: music_author_path(author),
+                   image: author.image,
+                   fallback_icon: "bi-person",
+                   subtitle: author.country&.name %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="empty-state text-center py-5">
+      <div class="display-6 text-muted mb-4">
+        <i class="bi bi-person" style="font-size: 4rem;"></i>
+      </div>
+      <h3 class="text-muted mb-4">No authors in this genre yet</h3>
+      <p class="text-muted mb-4">Add authors to start building your <%= @genre.name %> collection.</p>
+      <%= link_to authors_path, class: "btn btn-primary" do %>
+        <i class="bi bi-plus-lg me-2"></i>Manage Authors
+      <% end %>
+    </div>
+  <% end %>
+</div>

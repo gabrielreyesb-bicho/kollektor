@@ -1,0 +1,29 @@
+<%# 
+  Reusable mosaic card component
+  Required locals:
+  - title: Card title text
+  - url: Link destination
+  - image: ActiveStorage attachment or nil
+  - fallback_icon: Bootstrap icon class (e.g., "bi-music-note-list")
+  Optional locals:
+  - subtitle: Additional text below title
+%>
+
+<%= link_to url, class: "text-decoration-none" do %>
+  <div class="mosaic-card">
+    <% if local_assigns[:image] && image&.attached? %>
+      <%= image_tag image, alt: title, loading: "lazy" %>
+    <% else %>
+      <div class="mosaic-card-placeholder">
+        <i class="<%= fallback_icon %>"></i>
+      </div>
+    <% end %>
+    
+    <div class="mosaic-title">
+      <%= title %>
+      <% if local_assigns[:subtitle] && subtitle.present? %>
+        <div class="mosaic-subtitle"><%= subtitle %></div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

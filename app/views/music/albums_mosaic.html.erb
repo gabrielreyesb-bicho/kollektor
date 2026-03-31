@@ -1,0 +1,60 @@
+<div class="mosaic-container">
+  <!-- Breadcrumb navigation -->
+  <div class="mosaic-breadcrumb">
+    <%= link_to music_path do %>
+      <span>Genres</span>
+    <% end %>
+    <span class="breadcrumb-separator">›</span>
+    <%= link_to music_genre_path(@genre) do %>
+      <span><%= @genre.name %></span>
+    <% end %>
+    <span class="breadcrumb-separator">›</span>
+    <span class="breadcrumb-current"><%= @author.name %></span>
+  </div>
+
+  <div class="mosaic-header">
+    <h1 class="mosaic-page-title"><%= @author.name %></h1>
+    <p class="text-muted">Albums ordered by release year</p>
+  </div>
+
+  <% if @albums.any? %>
+    <div class="mosaic-grid mosaic-grid-albums">
+      <% @albums.each do |album| %>
+        <%= link_to album_path(album), class: "text-decoration-none" do %>
+          <div class="mosaic-card mosaic-album-card">
+            <% if album.cover_image.attached? %>
+              <%= image_tag album.cover_image, alt: album.name, loading: "lazy" %>
+            <% else %>
+              <div class="mosaic-card-placeholder">
+                <i class="bi bi-disc"></i>
+              </div>
+            <% end %>
+            
+            <div class="mosaic-album-info">
+              <div class="mosaic-album-title"><%= album.name %></div>
+              <div class="mosaic-album-year"><%= album.year %></div>
+            </div>
+            
+            <% if album.likes_count > 0 %>
+              <div class="mosaic-album-likes">
+                <i class="bi bi-headphones"></i>
+                <%= album.likes_count %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="empty-state text-center py-5">
+      <div class="display-6 text-muted mb-4">
+        <i class="bi bi-disc" style="font-size: 4rem;"></i>
+      </div>
+      <h3 class="text-muted mb-4">No albums by <%= @author.name %> yet</h3>
+      <p class="text-muted mb-4">Add albums to build this author's discography.</p>
+      <%= link_to albums_path, class: "btn btn-primary" do %>
+        <i class="bi bi-plus-lg me-2"></i>Manage Albums
+      <% end %>
+    </div>
+  <% end %>
+</div>

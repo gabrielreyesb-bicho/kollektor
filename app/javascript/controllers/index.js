@@ -11,6 +11,7 @@ import PreviewController from "./preview_controller"
 import MoodPromptController from "./mood_prompt_controller"
 import SearchInfoController from "./search_info_controller"
 import TomSelectController from "./tom_select_controller"
+import MosaicMenuController from "./mosaic_menu_controller"
 
 application.register("alert", AlertController)
 application.register("filter", FilterController)
@@ -23,3 +24,4 @@ application.register("preview", PreviewController)
 application.register("mood-prompt", MoodPromptController)
 application.register("search-info", SearchInfoController)
 application.register("tom-select", TomSelectController)
+application.register("mosaic-menu", MosaicMenuController)

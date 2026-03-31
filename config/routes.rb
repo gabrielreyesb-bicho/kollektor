@@ -36,8 +36,12 @@ end
   # root "posts#index"
 
   root to: redirect('/music')  # Redirect root to music collection
-  get 'music', to: 'music#index'  # Music collection home
-  get 'music/load_more', to: 'music#load_more'  # Load more albums for infinite scroll
+  
+  # Mosaic navigation routes
+  get 'music', to: 'music#genres_mosaic'  # Genre selection mosaic
+  get 'music/genres/:genre_id', to: 'music#authors_mosaic', as: 'music_genre'
+  get 'music/authors/:author_id', to: 'music#albums_mosaic', as: 'music_author'
+  
   get 'series_collection', to: 'series_collection#index' # Series collection home
   get 'tv_shows', to: redirect('/series_collection')
   resources :series do
