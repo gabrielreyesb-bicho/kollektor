@@ -33,18 +33,18 @@
     <div class="col-md-4">
       <div class="mb-4">
         <h5 class="mb-3">Genre Image</h5>
-        <%= form.file_field :image, 
-                          class: "form-control", 
+        <%= form.file_field :image,
+                          class: "form-control",
                           accept: "image/*",
                           direct_upload: true,
-                          data: { 
+                          data: {
                             controller: "preview",
-                            action: "change->preview#showImage" 
+                            action: "change->preview#showImage"
                           } %>
-        
+
         <div class="mt-3">
           <% if form.object.persisted? && form.object.image.attached? %>
-            <%= image_tag form.object.image, 
+            <%= image_tag form.object.image,
                         id: "imagePreview",
                         class: "img-thumbnail",
                         style: "max-height: 200px; width: 100%; object-fit: cover;" %>
@@ -58,4 +58,4 @@
       </div>
     </div>
   </div>
-<% end %> 
+<% end %>

@@ -13,7 +13,7 @@ minio:
   service: S3
   access_key_id: <%= ENV['MINIO_ACCESS_KEY'] %>
   secret_access_key: <%= ENV['MINIO_SECRET_KEY'] %>
-  endpoint: <%= ENV['MINIO_ENDPOINT'] %>
-  bucket: <%= ENV['MINIO_BUCKET'] %>
   region: us-east-1
+  bucket: <%= ENV['MINIO_BUCKET'] %>
+  endpoint: <%= ENV['MINIO_ENDPOINT'] %>
   force_path_style: true

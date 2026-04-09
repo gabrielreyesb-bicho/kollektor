@@ -22,12 +22,12 @@ Kollektor::Application.configure do
   Rails.application.routes.default_url_options[:host] = host
   config.action_controller.default_url_options = { host: host }
   
-  # Force SSL
-  config.force_ssl = true
-  
+  # Force SSL — disabled for local HTTP server
+  config.force_ssl = false
+
   # Active Storage URL generation
   config.active_storage.resolve_model_to_route = :rails_storage_proxy
-  config.active_storage.default_url_options = { host: host, protocol: 'https' }
+  config.active_storage.default_url_options = { host: host, protocol: 'http' }
 
   config.logger = ActiveSupport::Logger.new(STDOUT)
     .tap  { |logger| logger.formatter = ::Logger::Formatter.new }

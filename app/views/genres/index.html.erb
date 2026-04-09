@@ -3,11 +3,11 @@
   <div class="mb-4">
     <div class="d-flex flex-column flex-sm-row justify-content-between gap-3">
       <h1 class="mb-0">Genres</h1>
-      
+
       <div class="d-flex gap-2 flex-grow-1 flex-sm-grow-0" style="max-width: 100%;">
         <%= form_tag genres_path, method: :get, class: "flex-grow-1 flex-sm-grow-0", style: "max-width: 300px;" do %>
           <div class="input-group">
-            <%= text_field_tag :search, params[:search], 
+            <%= text_field_tag :search, params[:search],
                 class: "form-control bg-dark text-white border-secondary",
                 placeholder: "Search genres..." %>
             <% if params[:search].present? %>
@@ -29,40 +29,35 @@
   </div>
 
   <% if @genres.any? %>
-    <div class="card table-responsive">
-      <table class="table table-hover table-dark mb-0">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Albums</th>
-            <th>Authors</th>
-            <th width="150">Actions</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <% @genres.each do |genre| %>
-            <tr>
-              <td class="align-middle"><%= genre.name %></td>
-              <td class="align-middle"><%= genre.albums.count %></td>
-              <td class="align-middle"><%= genre.authors.count %></td>
-              <td>
-                <div class="btn-group btn-group-sm">
-                  <%= link_to edit_genre_path(genre), class: "btn btn-outline-primary" do %>
-                    <i class="bi bi-pencil"></i>
-                  <% end %>
-                  <%= link_to genre, 
-                      class: "btn btn-outline-danger",
-                      data: { turbo_method: :delete, 
-                             turbo_confirm: "Are you sure? This will also delete all associated authors and albums." } do %>
-                    <i class="bi bi-trash"></i>
-                  <% end %>
-                </div>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
+    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-3">
+      <% @genres.each do |genre| %>
+        <div class="col">
+          <div class="card bg-dark border-secondary h-100">
+            <% if genre.image.attached? %>
+              <%= image_tag genre.image, class: "card-img-top object-fit-cover", style: "height: 160px;" %>
+            <% else %>
+              <div class="d-flex align-items-center justify-content-center bg-secondary bg-opacity-25" style="height: 160px;">
+                <i class="bi bi-music-note-list text-muted" style="font-size: 3rem;"></i>
+              </div>
+            <% end %>
+            <div class="card-body p-2">
+              <h6 class="card-title mb-1 text-truncate"><%= genre.name %></h6>
+              <small class="text-muted"><%= genre.albums.count %> albums · <%= genre.authors.count %> authors</small>
+            </div>
+            <div class="card-footer p-1 border-secondary d-flex justify-content-end gap-1">
+              <%= link_to edit_genre_path(genre), class: "btn btn-outline-primary btn-sm" do %>
+                <i class="bi bi-pencil"></i>
+              <% end %>
+              <%= link_to genre,
+                  class: "btn btn-outline-danger btn-sm",
+                  data: { turbo_method: :delete,
+                         turbo_confirm: "Are you sure? This will also delete all associated authors and albums." } do %>
+                <i class="bi bi-trash"></i>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
     </div>
   <% else %>
     <div class="text-center py-5">
@@ -75,4 +70,4 @@
       <% end %>
     </div>
   <% end %>
-</div> 
+</div>
