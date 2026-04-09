@@ -36,7 +36,6 @@
         <%= form.file_field :image,
                           class: "form-control",
                           accept: "image/*",
-                          direct_upload: true,
                           data: {
                             controller: "preview",
                             action: "change->preview#showImage"
