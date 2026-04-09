@@ -40,9 +40,21 @@ class GenresController < ApplicationController
 
   def update
     authorize_genre_access
+
+    Rails.logger.info "=== GENRE UPDATE DEBUG ==="
+    Rails.logger.info "Genre ID: #{@genre.id}"
+    Rails.logger.info "Params received: #{genre_params.inspect}"
+    Rails.logger.info "Image param present: #{params[:genre][:image].present? rescue 'error reading'}"
+    Rails.logger.info "Active Storage service: #{ActiveStorage::Blob.service.class.name}"
+    Rails.logger.info "MINIO_ENDPOINT: #{ENV['MINIO_ENDPOINT'].inspect}"
+    Rails.logger.info "MINIO_BUCKET: #{ENV['MINIO_BUCKET'].inspect}"
+    Rails.logger.info "MINIO_ACCESS_KEY set: #{ENV['MINIO_ACCESS_KEY'].present?}"
+
     if @genre.update(genre_params)
+      Rails.logger.info "=== UPDATE SUCCESS — image attached: #{@genre.image.attached?} ==="
       redirect_to genres_path
     else
+      Rails.logger.info "=== UPDATE FAILED — errors: #{@genre.errors.full_messages} ==="
       render :edit, status: :unprocessable_entity
     end
   end
