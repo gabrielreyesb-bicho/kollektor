@@ -35,7 +35,7 @@ end
   # Defines the root path route ("/")
   # root "posts#index"
 
-  root to: redirect('/music')  # Redirect root to music collection
+  root to: 'home#index'
   
   # Mosaic navigation routes
   get 'music', to: 'music#genres_mosaic'  # Genre selection mosaic
