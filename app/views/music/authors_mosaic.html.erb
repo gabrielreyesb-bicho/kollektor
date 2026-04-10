@@ -16,6 +16,9 @@
       <button class="btn btn-outline-light btn-sm" data-action="click->get-lucky-modal#open">
         <i class="bi bi-shuffle me-1"></i>Get Lucky
       </button>
+      <%= link_to music_genre_albums_path(@genre), class: "btn btn-outline-light btn-sm" do %>
+        <i class="bi bi-collection me-1"></i>All Albums
+      <% end %>
       <%= link_to genres_path, class: "btn btn-outline-light btn-sm" do %>
         <i class="bi bi-pencil-square me-1"></i>Manage
       <% end %>

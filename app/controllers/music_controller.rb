@@ -27,6 +27,21 @@ class MusicController < ApplicationController
                      .order(:name)
   end
 
+  def genre_albums_mosaic
+    @genre = Genre.find(params[:genre_id])
+
+    unless @genre.user == current_user || @genre.user.nil?
+      flash[:alert] = "You are not authorized to access this genre"
+      redirect_to music_path and return
+    end
+
+    @albums = current_user.albums
+                          .where(genre: @genre)
+                          .with_attached_cover_image
+                          .includes(:author)
+                          .order(:author_id, year: :asc)
+  end
+
   def albums_mosaic
     # Load author by ID
     @author = Author.find(params[:author_id])

@@ -40,6 +40,7 @@ end
   # Mosaic navigation routes
   get 'music', to: 'music#genres_mosaic'  # Genre selection mosaic
   get 'music/genres/:genre_id', to: 'music#authors_mosaic', as: 'music_genre'
+  get 'music/genres/:genre_id/albums', to: 'music#genre_albums_mosaic', as: 'music_genre_albums'
   get 'music/authors/:author_id', to: 'music#albums_mosaic', as: 'music_author'
   
   get 'series_collection', to: 'series_collection#index' # Series collection home
