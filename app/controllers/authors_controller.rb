@@ -1,7 +1,10 @@
 class AuthorsController < ApplicationController
   include MusicSidebarData
+
+  skip_before_action :load_music_sidebar_data
   before_action :set_author, only: %i[ show edit update destroy ]
   before_action :set_form_dependencies, only: %i[ new edit create update ]
+  before_action :load_sidebar_data, only: %i[ index show ]
 
   def index
     @authors = current_user.authors.includes(:genre, :country)
@@ -45,9 +48,15 @@ class AuthorsController < ApplicationController
 
   private
   
+  def load_sidebar_data
+    @genres = Genre.by_collection_type('Music').order(:name)
+    @authors = current_user.authors.order(:name)
+  end
+
   def set_form_dependencies
     @countries = Country.order(:name)
     @genres = Genre.by_collection_type('Music').order(:name)
+    @authors = current_user.authors.order(:name)
   end
 
   def set_author

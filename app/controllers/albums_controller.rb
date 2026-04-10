@@ -1,8 +1,10 @@
 class AlbumsController < ApplicationController
   include MusicSidebarData
-  
+
+  skip_before_action :load_music_sidebar_data
   before_action :set_album, only: %i[ show edit update destroy ]
   before_action :load_dependencies, only: %i[ new edit create update ]
+  before_action :load_sidebar_data, only: %i[ index show ]
 
   def index
     @albums = current_user.albums.includes(:genre, :author)
@@ -97,17 +99,15 @@ class AlbumsController < ApplicationController
       end
     end
 
+    def load_sidebar_data
+      @title = "Music Collection"
+      @genres = Genre.by_collection_type('Music').order(:name)
+      @authors = current_user.authors.order(:name)
+    end
+
     def load_dependencies
-      # Try to get genres by collection type, fallback to all genres if collection type doesn't exist
-      music_collection_type = CollectionType.find_by(name: 'Music')
-      if music_collection_type
-        @genres = Genre.by_collection_type('Music').order(:name)
-        @authors = current_user.authors.by_collection_type('Music').all
-      else
-        # Fallback: get all genres and authors if collection type doesn't exist
-        @genres = Genre.order(:name)
-        @authors = current_user.authors.all
-      end
+      @genres = Genre.by_collection_type('Music').order(:name)
+      @authors = current_user.authors.by_collection_type('Music').order(:name)
     end
 
     def album_params

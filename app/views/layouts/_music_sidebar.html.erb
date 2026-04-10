@@ -31,31 +31,20 @@
         </div>
       </div>
     </li>
-    <li style="width: 100%; padding: 0.6rem 0.75rem;">
-      <div class="form-group">
-        <div class="position-relative">
-          <i class="bi bi-disc position-absolute" style="left: 12px; top: 50%; transform: translateY(-50%); z-index: 2;"></i>
-          <%= select_tag :album_id,
-              options_for_select([
-                ["All Albums", ""],
-                *@albums_for_filter.map { |a| [a.name, a.id] }
-              ], params[:album_id]),
-              class: "form-select sidebar-select",
-              style: "padding-left: 35px;",
-              data: {
-                controller: "filter",
-                action: "change->filter#filterChanged",
-                filter_filter_type_value: "album_id"
-              } %>
-        </div>
-      </div>
-    </li>
   </ul>
 </div>
 
 <!-- Management Section at Bottom -->
 <div class="sidebar-footer">
   <ul class="nav flex-column">
+    <li class="nav-item">
+      <%= link_to music_path,
+          class: "nav-link",
+          style: "color: white; padding: 0.6rem 0.75rem; display: block; text-decoration: none;" do %>
+        <i class="bi bi-grid me-2"></i>Browse Genres
+      <% end %>
+    </li>
+    <hr>
     <li class="nav-item">
       <%= link_to statistics_path,
           class: "nav-link",

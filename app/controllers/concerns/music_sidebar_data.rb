@@ -10,7 +10,6 @@ module MusicSidebarData
   def load_music_sidebar_data
     @title = "Music Collection"
     @genres = Genre.by_collection_type('Music').order(:name)
-    @authors = current_user.authors.order(:name)
-    @albums_for_filter = current_user.albums.order(:name)
+    @authors ||= current_user.authors.order(:name)
   end
 end 

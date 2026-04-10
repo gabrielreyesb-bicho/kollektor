@@ -54,35 +54,6 @@ class Album < ApplicationRecord
     "https://music.youtube.com/search?q=#{URI.encode_www_form_component("#{name} #{author.name} album")}"
   end
 
-  def wikipedia_url
-    base_url = "https://en.wikipedia.org/api/rest_v1/page/summary/"
-    # Create a Wikipedia-friendly title format
-    title = "#{name} (#{author.name} album)"
-    formatted_title = title.gsub(' ', '_')
-    
-    response = HTTParty.get(
-      "#{base_url}#{URI.encode_www_form_component(formatted_title)}",
-      headers: {
-        'User-Agent' => 'KollektorApp/1.0',
-        'Accept' => 'application/json'
-      }
-    )
-
-    if response.success?
-      "https://en.wikipedia.org/wiki/#{formatted_title}"
-    else
-      # Fallback to search if direct lookup fails
-      "https://en.wikipedia.org/wiki/Special:Search?" + {
-        search: "#{author.name} #{name} album",
-        ns0: 1,
-        fulltext: 1,
-        profile: "advanced"
-      }.to_query
-    end
-  rescue => e
-    # Fallback URL in case of any error
-    "https://en.wikipedia.org/wiki/Special:Search?search=#{URI.encode_www_form_component("#{author.name} #{name} album")}"
-  end
 
   private
     def cover_image_attached?

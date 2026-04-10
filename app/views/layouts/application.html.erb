@@ -33,7 +33,7 @@
         <%= yield %>
       <% elsif mosaic_view? %>
         <!-- Mosaic Views - Full Width Without Sidebar -->
-        <div class="main-content-full" data-controller="mosaic-menu">
+        <div class="main-content-full" data-controller="mosaic-menu get-lucky-modal">
           <!-- Navbar for mosaic views -->
           <nav class="navbar navbar-dark bg-primary fixed-top mosaic-navbar">
             <div class="container-fluid">
@@ -43,7 +43,7 @@
               </div>
               
               <!-- Menu button -->
-              <button class="btn btn-link text-white" 
+              <button class="btn btn-link text-white"
                       type="button"
                       data-action="click->mosaic-menu#toggle"
                       aria-label="Menu">
@@ -52,6 +52,32 @@
             </div>
           </nav>
           
+          <!-- Get Lucky Modal -->
+          <div class="centered-modal-overlay"
+               data-get-lucky-modal-target="modal"
+               data-action="click->get-lucky-modal#closeOnBackdrop"
+               role="dialog"
+               aria-modal="true"
+               aria-label="Get Lucky">
+            <div class="centered-modal-content"
+                 data-action="click->get-lucky-modal#stopPropagation"
+                 role="document">
+              <div class="mosaic-menu-header">
+                <h3 class="mb-0">Get Lucky</h3>
+                <button class="btn btn-link text-white"
+                        data-action="click->get-lucky-modal#close"
+                        aria-label="Close">
+                  <i class="bi bi-x-lg" style="font-size: 1.5rem;"></i>
+                </button>
+              </div>
+              <div class="p-3 overflow-auto">
+                <%= turbo_frame_tag "get_lucky_frame",
+                      src: "",
+                      data: { src: get_lucky_path, "get-lucky-modal-target": "frame" } %>
+              </div>
+            </div>
+          </div>
+
           <!-- Mosaic Menu Overlay -->
           <div class="mosaic-menu-overlay" 
                data-mosaic-menu-target="overlay"

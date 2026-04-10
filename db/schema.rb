@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_06_24_220912) do
+ActiveRecord::Schema[7.1].define(version: 2026_04_09_232616) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -63,6 +63,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_24_220912) do
     t.integer "user_id"
     t.index ["author_id"], name: "index_albums_on_author_id"
     t.index ["genre_id"], name: "index_albums_on_genre_id"
+    t.index ["name"], name: "index_albums_on_name"
     t.index ["user_id"], name: "index_albums_on_user_id"
   end
 
@@ -76,6 +77,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_24_220912) do
     t.integer "user_id"
     t.index ["country_id"], name: "index_authors_on_country_id"
     t.index ["genre_id"], name: "index_authors_on_genre_id"
+    t.index ["name"], name: "index_authors_on_name"
     t.index ["user_id"], name: "index_authors_on_user_id"
   end
 
@@ -108,6 +110,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_24_220912) do
     t.integer "user_id"
     t.integer "collection_type_id", null: false
     t.index ["collection_type_id"], name: "index_genres_on_collection_type_id"
+    t.index ["name"], name: "index_genres_on_name"
     t.index ["user_id"], name: "index_genres_on_user_id"
   end
 

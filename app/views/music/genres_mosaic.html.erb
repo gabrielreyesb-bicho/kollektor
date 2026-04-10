@@ -1,7 +1,17 @@
 <div class="mosaic-container">
-  <div class="mosaic-header">
-    <h1 class="mosaic-page-title">Your Music Genres</h1>
-    <p class="text-muted">Choose a genre to explore your collection</p>
+  <div class="mosaic-header d-flex justify-content-between align-items-start">
+    <div>
+      <h1 class="mosaic-page-title">Your Music Genres</h1>
+      <p class="text-muted">Choose a genre to explore your collection</p>
+    </div>
+    <div class="d-flex gap-2">
+      <button class="btn btn-outline-light btn-sm" data-action="click->get-lucky-modal#open">
+        <i class="bi bi-shuffle me-1"></i>Get Lucky
+      </button>
+      <%= link_to genres_path, class: "btn btn-outline-light btn-sm" do %>
+        <i class="bi bi-pencil-square me-1"></i>Manage
+      <% end %>
+    </div>
   </div>
 
   <% if @genres.any? %>

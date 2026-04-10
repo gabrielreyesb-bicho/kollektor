@@ -1,97 +1,56 @@
-<div class="container-fluid">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1><%= @title %></h1>
-  </div>
-
+<%= turbo_frame_tag "get_lucky_frame" do %>
   <% if @recommended_albums.any? %>
-    <div class="mb-4">
-      <h5 class="text-muted">Here are some random albums you might enjoy:</h5>
-    </div>
-    
-    <div class="row g-4">
-      <% @recommended_albums.each_with_index do |album, index| %>
-        <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-          <div class="card h-100">
+    <div class="d-flex flex-column gap-3">
+      <% @recommended_albums.each do |album| %>
+        <div class="d-flex gap-3 align-items-start">
+          <!-- Cover -->
+          <div style="flex-shrink: 0; width: 80px; height: 80px;">
             <%= link_to album_path(album) do %>
               <% if album.cover_image.attached? %>
-                <%= image_tag album.cover_image, class: "card-img-top", loading: "lazy", style: "aspect-ratio: 1; object-fit: cover;" %>
+                <%= image_tag album.cover_image, style: "width: 80px; height: 80px; object-fit: cover; border-radius: 6px;" %>
               <% else %>
-                <div class="d-flex align-items-center justify-content-center" style="aspect-ratio: 1; background-color: var(--dark-hover);">
-                  <i class="bi bi-disc text-muted" style="font-size: 3rem;"></i>
+                <div class="d-flex align-items-center justify-content-center rounded" style="width: 80px; height: 80px; background: var(--dark-hover);">
+                  <i class="bi bi-disc text-muted" style="font-size: 2rem;"></i>
                 </div>
               <% end %>
             <% end %>
-            <div class="card-body p-2">
-              <!-- Album title and likes are always visible -->
-              <div class="d-flex justify-content-between align-items-center mb-1">
-                <h6 class="card-title mb-0 text-truncate"><%= album.name %></h6>
-                <small class="text-white ms-2">
-                  <i class="bi bi-headphones"></i>
-                  <span id="likes-count-<%= album.id %>"><%= album.likes_count %></span>
-                </small>
-              </div>
-              
-              <!-- Author name always visible -->
-              <p class="mb-1">
-                <small class="text-muted text-truncate">
-                  <i class="bi bi-person"></i> <%= album.author.name %>
-                </small>
-              </p>
-              
-              <!-- Additional info and buttons are now always visible -->
-              <p class="mb-2">
-                <small class="text-muted">
-                  <i class="bi bi-music-note"></i> <%= album.genre.name %> •
-                  <i class="bi bi-calendar"></i> <%= album.year %>
-                </small>
-              </p>
-              
-              <div class="btn-links d-flex gap-1">
-                <div id="like-button-<%= album.id %>">
-                  <%= button_to api_album_rate_path(album), 
-                      method: :post,
-                      class: "btn btn-sm btn-outline-danger",
-                      form: { 
-                        data: { turbo: true },
-                        class: "d-inline-block"
-                      },
-                      params: {
-                        random_selection: @random_selection,
-                        recommended_ids: @recommended_albums.map(&:id).join(',')
-                      } do %>
-                    <i class="bi bi-hand-thumbs-up-fill"></i>
-                    <span class="ms-1"><%= album.likes_count %></span>
-                  <% end %>
-                </div>
-                
-                <% if album.wikipedia_url.present? %>
-                  <%= link_to album.wikipedia_url,
-                      class: "btn btn-sm btn-secondary",
-                      target: "_blank",
-                      data: { turbo: false } do %>
-                    <i class="bi bi-book"></i>
-                  <% end %>
-                <% end %>
-                
-                <% if album.youtube_music_url.present? %>
-                  <%= link_to album.youtube_music_url,
-                      class: "btn btn-sm btn-danger",
-                      target: "_blank",
-                      data: { turbo: false } do %>
-                    <i class="bi bi-youtube"></i>
-                  <% end %>
+          </div>
+
+          <!-- Info -->
+          <div class="flex-grow-1 overflow-hidden">
+            <%= link_to album_path(album), class: "text-white text-decoration-none" do %>
+              <div class="fw-semibold text-truncate"><%= album.name %></div>
+            <% end %>
+            <div class="text-muted small text-truncate"><%= album.author.name %></div>
+            <div class="text-muted small"><%= album.genre.name %> · <%= album.year %></div>
+
+            <div class="d-flex gap-1 mt-2">
+              <div id="like-button-<%= album.id %>">
+                <%= button_to api_album_rate_path(album),
+                    method: :post,
+                    class: "btn btn-sm btn-outline-danger",
+                    form: { data: { turbo: true }, class: "d-inline-block" },
+                    params: {
+                      random_selection: @random_selection,
+                      recommended_ids: @recommended_albums.map(&:id).join(',')
+                    } do %>
+                  <i class="bi bi-hand-thumbs-up-fill"></i>
+                  <span class="ms-1"><%= album.likes_count %></span>
                 <% end %>
               </div>
+
+              <% if album.youtube_music_url.present? %>
+                <%= link_to album.youtube_music_url, class: "btn btn-sm btn-danger", target: "_blank", data: { turbo: false } do %>
+                  <i class="bi bi-youtube"></i>
+                <% end %>
+              <% end %>
             </div>
           </div>
         </div>
+        <hr class="border-secondary my-0">
       <% end %>
     </div>
   <% else %>
-    <div class="alert alert-info">
-      <h5>No albums found</h5>
-      <p>Try adding some albums to your collection first!</p>
-      <%= link_to "Add Album", new_album_path, class: "btn btn-primary" %>
-    </div>
+    <p class="text-muted">No albums found. Add some to your collection first.</p>
   <% end %>
-</div> 
+<% end %>
