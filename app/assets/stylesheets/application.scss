@@ -1031,8 +1031,9 @@ body {
   transition: transform 0.3s ease;
   display: flex;
   flex-direction: column;
-  width: 90vw;
-  max-width: 420px;
+  width: fit-content;
+  min-width: 320px;
+  max-width: 90vw;
   max-height: 80vh;
   overflow: hidden;
 }
