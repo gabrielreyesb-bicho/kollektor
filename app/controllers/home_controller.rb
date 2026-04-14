@@ -4,15 +4,11 @@ class HomeController < ApplicationController
   include MusicSidebarData
 
   def index
-    # If user is not logged in, show a welcome page
     unless user_signed_in?
       render 'welcome' and return
     end
-    
-    # Show collection selector dashboard
-    @collection_types = CollectionType.all
-    @first_series = current_user.series.where(seen: [false, nil]).order(:created_at).first
-    render 'collections'
+
+    redirect_to music_path
   end
 
   def albums
