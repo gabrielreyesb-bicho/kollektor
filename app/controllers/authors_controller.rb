@@ -7,7 +7,7 @@ class AuthorsController < ApplicationController
   before_action :load_sidebar_data, only: %i[ index show ]
 
   def index
-    @authors = current_user.authors.includes(:genre, :country)
+    @authors = current_user.authors.includes(:genre, :country, image_attachment: :blob)
     @authors = @authors.search(params[:search]) if params[:search].present?
     @authors = @authors.order(:name)
     @title = "Music Collection"
