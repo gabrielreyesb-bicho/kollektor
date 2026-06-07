@@ -26,23 +26,13 @@ class Album < ApplicationRecord
               query: "%#{query.downcase}%")
   }
 
-  # Returns albums ordered by likes count, strongly favoring those with fewer likes
-  # The formula gives much higher weight to albums with zero likes
-  scope :weighted_by_likes, -> {
-    # Order by likes_count first (primary), then by random (secondary)
-    # This ensures albums with 0 likes always come before those with more likes,
-    # and within each likes_count group, the order is random
-    # Use database-specific random function for better compatibility
-    if connection.adapter_name.downcase.include?('sqlite')
-      order(:likes_count).order('RANDOM()')
-    elsif connection.adapter_name.downcase.include?('postgresql')
-      order(:likes_count).order('RANDOM()')
-    elsif connection.adapter_name.downcase.include?('mysql')
-      order(:likes_count).order('RAND()')
-    else
-      # Fallback for other databases
-      order(:likes_count)
-    end
+  # Orden para sugerencias tipo "ruleta": prioriza los álbumes con menos
+  # "likes" (los que aún no has escuchado/marcado) y, a igualdad de likes,
+  # en orden aleatorio uniforme — sin sesgo por autor ni género. Así favorece
+  # lo no escuchado y no repite siempre los mismos.
+  scope :suggestions_order, -> {
+    random_fn = connection.adapter_name.downcase.include?('mysql') ? 'RAND()' : 'RANDOM()'
+    order(:likes_count).order(Arel.sql(random_fn))
   }
 
   def increment_likes

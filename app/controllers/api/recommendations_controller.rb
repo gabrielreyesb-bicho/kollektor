@@ -36,7 +36,7 @@ class Api::RecommendationsController < ApplicationController
 
   def get_random_recommendations
     current_user.albums.includes(:author, :genre).with_attached_cover_image
-                .weighted_by_likes
+                .suggestions_order
                 .limit(4)
                 .to_a
   end
