@@ -9,6 +9,7 @@ class AuthorsController < ApplicationController
   def index
     @authors = current_user.authors.includes(:genre, :country, image_attachment: :blob)
     @authors = @authors.search(params[:search]) if params[:search].present?
+    @authors = @authors.where(genre_id: params[:genre_id]) if params[:genre_id].present?
     @authors = @authors.order(:name)
     @title = "Music Collection"
   end
