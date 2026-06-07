@@ -590,7 +590,16 @@ body {
 // Mosaic header
 .mosaic-header {
   margin-bottom: 2rem;
-  
+
+  .mosaic-logo {
+    height: 40px;
+    width: auto;
+
+    @media (min-width: 768px) {
+      height: 56px;
+    }
+  }
+
   .mosaic-page-title {
     font-size: 1.75rem;
     font-weight: 600;
