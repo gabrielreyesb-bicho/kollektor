@@ -13,7 +13,7 @@
       <div class="d-flex gap-2 flex-grow-1 flex-sm-grow-0 flex-wrap flex-sm-nowrap" style="max-width: 100%;">
         <%= form_tag authors_path, method: :get, class: "d-flex gap-2 flex-grow-1 flex-sm-grow-0 flex-wrap flex-sm-nowrap" do %>
           <%= select_tag :genre_id,
-              options_for_select([["All genres", ""]] + @genres.map { |g| [g.name, g.id] }, params[:genre_id]),
+              options_for_select([["All genres", ""]] + @filter_genres.map { |g| [g.name, g.id] }, params[:genre_id]),
               class: "form-select bg-dark text-white border-secondary",
               style: "max-width: 180px;",
               onchange: "this.form.requestSubmit();" %>

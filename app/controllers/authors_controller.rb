@@ -12,6 +12,11 @@ class AuthorsController < ApplicationController
     @authors = @authors.where(genre_id: params[:genre_id]) if params[:genre_id].present?
     @authors = @authors.order(:name)
     @title = "Music Collection"
+
+    # Filter options built from genres actually used by the user's authors,
+    # so each option matches real records (avoids cross-user duplicate genres
+    # yielding empty results).
+    @filter_genres = Genre.where(id: current_user.authors.select(:genre_id)).order(:name)
   end
 
   def show

@@ -12,6 +12,12 @@ class AlbumsController < ApplicationController
     @albums = @albums.where(genre_id: params[:genre_id]) if params[:genre_id].present?
     @albums = @albums.where(author_id: params[:author_id]) if params[:author_id].present?
     @albums = @albums.order(:name)
+
+    # Filter options built from genres/authors actually used by the user's
+    # albums, so every option matches real album records (avoids duplicate
+    # genres from other users yielding empty results).
+    @filter_genres = Genre.where(id: current_user.albums.select(:genre_id)).order(:name)
+    @filter_authors = Author.where(id: current_user.albums.select(:author_id)).order(:name)
   end
 
   def show
