@@ -5,7 +5,7 @@ class HomeController < ApplicationController
 
   def index
     unless user_signed_in?
-      render 'welcome' and return
+      redirect_to new_user_session_path and return
     end
 
     redirect_to music_path
