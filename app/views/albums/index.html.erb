@@ -10,13 +10,23 @@
         </span>
       </div>
       
-      <div class="d-flex gap-2 flex-grow-1 flex-sm-grow-0" style="max-width: 100%;">
-        <%= form_tag albums_path, method: :get, class: "flex-grow-1 flex-sm-grow-0", style: "max-width: 300px;" do %>
-          <div class="input-group">
-            <%= text_field_tag :search, params[:search], 
+      <div class="d-flex gap-2 flex-grow-1 flex-sm-grow-0 flex-wrap flex-sm-nowrap" style="max-width: 100%;">
+        <%= form_tag albums_path, method: :get, class: "d-flex gap-2 flex-grow-1 flex-sm-grow-0 flex-wrap flex-sm-nowrap" do %>
+          <%= select_tag :genre_id,
+              options_for_select([["All genres", ""]] + @genres.map { |g| [g.name, g.id] }, params[:genre_id]),
+              class: "form-select bg-dark text-white border-secondary",
+              style: "max-width: 180px;",
+              onchange: "this.form.requestSubmit();" %>
+          <%= select_tag :author_id,
+              options_for_select([["All authors", ""]] + @authors.map { |a| [a.name, a.id] }, params[:author_id]),
+              class: "form-select bg-dark text-white border-secondary",
+              style: "max-width: 180px;",
+              onchange: "this.form.requestSubmit();" %>
+          <div class="input-group" style="max-width: 300px;">
+            <%= text_field_tag :search, params[:search],
                 class: "form-control bg-dark text-white border-secondary",
                 placeholder: "Search albums..." %>
-            <% if params[:search].present? %>
+            <% if params[:search].present? || params[:genre_id].present? || params[:author_id].present? %>
               <%= link_to albums_path, class: "btn btn-outline-secondary" do %>
                 <i class="bi bi-x-lg"></i>
               <% end %>
@@ -24,7 +34,7 @@
           </div>
         <% end %>
 
-        <%= link_to new_album_path, 
+        <%= link_to new_album_path,
             class: "btn btn-primary d-flex align-items-center gap-2",
             style: "white-space: nowrap;" do %>
           <i class="bi bi-plus-lg"></i>
