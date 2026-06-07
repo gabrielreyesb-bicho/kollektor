@@ -11,7 +11,8 @@ class AlbumsController < ApplicationController
     @albums = @albums.search(params[:search]) if params[:search].present?
     @albums = @albums.where(genre_id: params[:genre_id]) if params[:genre_id].present?
     @albums = @albums.where(author_id: params[:author_id]) if params[:author_id].present?
-    @albums = @albums.order(:name)
+    # Ordenar alfabéticamente por autor, luego álbum y año.
+    @albums = @albums.joins(:author).order("authors.name ASC, albums.name ASC, albums.year ASC")
 
     # Filter options built from genres/authors actually used by the user's
     # albums, so every option matches real album records (avoids duplicate
