@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_04_09_232616) do
+ActiveRecord::Schema[7.1].define(version: 2026_06_08_162630) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -60,7 +60,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_04_09_232616) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "likes_count", default: 0, null: false
-    t.integer "user_id"
+    t.integer "user_id", null: false
     t.index ["author_id"], name: "index_albums_on_author_id"
     t.index ["genre_id"], name: "index_albums_on_genre_id"
     t.index ["name"], name: "index_albums_on_name"
@@ -74,7 +74,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_04_09_232616) do
     t.integer "country_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "user_id"
+    t.integer "user_id", null: false
     t.index ["country_id"], name: "index_authors_on_country_id"
     t.index ["genre_id"], name: "index_authors_on_genre_id"
     t.index ["name"], name: "index_authors_on_name"
@@ -107,7 +107,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_04_09_232616) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "user_id"
+    t.integer "user_id", null: false
     t.integer "collection_type_id", null: false
     t.index ["collection_type_id"], name: "index_genres_on_collection_type_id"
     t.index ["name"], name: "index_genres_on_name"

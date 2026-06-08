@@ -1,5 +1,5 @@
 class Genre < ApplicationRecord
-  belongs_to :user, optional: true
+  belongs_to :user
   belongs_to :collection_type
   has_one_attached :image
 
