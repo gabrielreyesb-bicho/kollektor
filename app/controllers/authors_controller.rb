@@ -49,7 +49,7 @@ class AuthorsController < ApplicationController
 
   def destroy
     @author.destroy
-    redirect_to authors_path, notice: 'Author was successfully destroyed.'
+    redirect_to authors_path, status: :see_other, notice: 'Author was successfully destroyed.'
   end
 
   private

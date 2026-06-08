@@ -47,7 +47,7 @@ class SeriesController < ApplicationController
 
   def destroy
     @series.destroy
-    redirect_to series_index_path
+    redirect_to series_index_path, status: :see_other
   end
 
   def snooze

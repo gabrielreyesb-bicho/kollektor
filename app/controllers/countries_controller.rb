@@ -36,7 +36,7 @@ class CountriesController < ApplicationController
 
   def destroy
     @country.destroy!
-    redirect_to countries_path(collection_type: params[:collection_type]), notice: 'Country was successfully destroyed.'
+    redirect_to countries_path(collection_type: params[:collection_type]), status: :see_other, notice: 'Country was successfully destroyed.'
   end
 
   private

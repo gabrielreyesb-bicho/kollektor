@@ -76,7 +76,7 @@ class AlbumsController < ApplicationController
   def destroy
     authorize_album_access
     @album.destroy!
-    redirect_to albums_url
+    redirect_to albums_url, status: :see_other
   end
 
   def search_info

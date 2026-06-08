@@ -63,7 +63,7 @@ class GenresController < ApplicationController
   def destroy
     authorize_genre_access
     @genre.destroy!
-    redirect_to genres_url, notice: 'Genre was successfully destroyed.'
+    redirect_to genres_url, status: :see_other, notice: 'Genre was successfully destroyed.'
   end
 
   private

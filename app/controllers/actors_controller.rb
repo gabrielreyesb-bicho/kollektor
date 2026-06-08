@@ -35,7 +35,7 @@ class ActorsController < ApplicationController
 
   def destroy
     @actor.destroy
-    redirect_to actors_path, notice: 'Actor was successfully destroyed.'
+    redirect_to actors_path, status: :see_other, notice: 'Actor was successfully destroyed.'
   end
 
   private
