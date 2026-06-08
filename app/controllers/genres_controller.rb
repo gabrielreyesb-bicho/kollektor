@@ -1,7 +1,6 @@
 class GenresController < ApplicationController
   include MusicSidebarData
 
-  skip_before_action :load_music_sidebar_data, only: %i[ new edit create update destroy ]
   before_action :set_genre, only: %i[ show edit update destroy ]
 
   def index

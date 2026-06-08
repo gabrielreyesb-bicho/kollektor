@@ -11,7 +11,7 @@
                   data-action="change->filter#filterChanged"
                   data-filter-filter-type-value="genre_id">
             <option value="">All Genres</option>
-            <%= options_from_collection_for_select(@genres, :id, :name, params[:genre_id]) %>
+            <%= options_from_collection_for_select(@genres || [], :id, :name, params[:genre_id]) %>
           </select>
         </div>
       </div>
@@ -26,7 +26,7 @@
                   data-action="change->filter#filterChanged"
                   data-filter-filter-type-value="author_id">
             <option value="">All Authors</option>
-            <%= options_from_collection_for_select(@authors, :id, :name, params[:author_id]) %>
+            <%= options_from_collection_for_select(@authors || [], :id, :name, params[:author_id]) %>
           </select>
         </div>
       </div>
