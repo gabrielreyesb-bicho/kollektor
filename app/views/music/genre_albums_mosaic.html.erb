@@ -17,14 +17,6 @@
       <h1 class="mosaic-page-title"><%= @genre.name %></h1>
       <p class="text-muted">All albums in this genre</p>
     </div>
-    <div class="d-flex gap-2">
-      <button class="btn btn-outline-light btn-sm" data-action="click->get-lucky-modal#open">
-        <i class="bi bi-shuffle me-1"></i>Get Lucky
-      </button>
-      <%= link_to genres_path, class: "btn btn-outline-light btn-sm" do %>
-        <i class="bi bi-pencil-square me-1"></i>Manage
-      <% end %>
-    </div>
   </div>
 
   <% if @albums.any? %>

@@ -46,13 +46,22 @@
                 <%= image_tag "logo.png", alt: "Kollektor", style: "height: 24px; width: auto;" %>
               </div>
               
-              <!-- Menu button -->
-              <button class="btn btn-link text-white"
-                      type="button"
-                      data-action="click->mosaic-menu#toggle"
-                      aria-label="Menu">
-                <i class="bi bi-three-dots-vertical" style="font-size: 1.5rem;"></i>
-              </button>
+              <!-- Action buttons -->
+              <div class="d-flex align-items-center">
+                <button class="btn btn-link text-white"
+                        type="button"
+                        data-action="click->get-lucky-modal#open"
+                        aria-label="Get Lucky"
+                        title="Get Lucky">
+                  <i class="bi bi-shuffle" style="font-size: 1.35rem;"></i>
+                </button>
+                <button class="btn btn-link text-white"
+                        type="button"
+                        data-action="click->mosaic-menu#toggle"
+                        aria-label="Menu">
+                  <i class="bi bi-three-dots-vertical" style="font-size: 1.5rem;"></i>
+                </button>
+              </div>
             </div>
           </nav>
           
