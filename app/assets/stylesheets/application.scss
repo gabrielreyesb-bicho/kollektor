@@ -251,13 +251,13 @@
 }
 
 /* Mobile navbar */
-.navbar.fixed-top {
+.navbar.fixed-top:not(.mosaic-navbar) {
   z-index: 1045;
-  
+
   @media (min-width: 768px) {
     display: none;
   }
-  
+
   .container-fluid {
     padding-left: 1rem;
     padding-right: 1rem;
@@ -626,9 +626,9 @@ body {
     grid-template-columns: repeat(4, 1fr);  // Desktop: 4 columns
     gap: 1.5rem;
   }
-  
+
   @media (min-width: 1400px) {
-    grid-template-columns: repeat(5, 1fr);  // Large desktop: 5 columns
+    grid-template-columns: repeat(4, 1fr);  // Large desktop: keep 4 columns for bigger cards
   }
 }
 
