@@ -14,7 +14,6 @@ class DataExportController < ApplicationController
       genres: Genre.count,
       countries: Country.count,
       series: Series.count,
-      actors: Actor.count,
       notifications: Notification.count,
       active_storage_attachments: ActiveStorage::Attachment.count,
       active_storage_blobs: ActiveStorage::Blob.count,
@@ -63,7 +62,6 @@ class DataExportController < ApplicationController
       'genres' => Genre,
       'countries' => Country,
       'series' => Series,
-      'actors' => Actor,
       'notifications' => Notification
     }
     

@@ -208,7 +208,7 @@
             </nav>
 
             <!-- Notification Bell Icon (only for series context) -->
-            <% if user_signed_in? && !current_page?(root_path) && ['series', 'series_collection', 'actors'].include?(controller_name) %>
+            <% if user_signed_in? && !current_page?(root_path) && ['series', 'series_collection'].include?(controller_name) %>
               <div class="position-fixed top-0 end-0 p-3" style="z-index: 2000;">
                 <div class="dropdown">
                   <a class="btn btn-dark position-relative" href="#" id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
@@ -235,13 +235,6 @@
                 </div>
               </div>
             <% end %>
-
-            <!-- Show due snooze reminders if any -->
-            <% if @due_snooze_reminders.present? %>
-              <%= render 'shared/due_snooze_reminders', due_snooze_reminders: @due_snooze_reminders %>
-            <% end %>
-
-
 
             <%= yield %>
           </div>

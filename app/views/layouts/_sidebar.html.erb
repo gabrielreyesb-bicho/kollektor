@@ -2,7 +2,7 @@
 <nav class="sidebar" data-sidebar-target="sidebar">
   <%
     # Determine the collection context. This will be used for the title link and for choosing the correct sidebar partial.
-    is_series_context = ['series', 'series_collection', 'actors'].include?(controller_name) ||
+    is_series_context = ['series', 'series_collection'].include?(controller_name) ||
                         (['genres', 'authors', 'countries'].include?(controller_name) && @collection_type == 'Series')
   %>
 

@@ -44,7 +44,6 @@ models = [
   'Genre',
   'Country',
   'Series',
-  'Actor',
   'Notification'
 ]
 

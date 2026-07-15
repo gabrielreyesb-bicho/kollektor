@@ -24,13 +24,6 @@
       <% end %>
     </li>
     <li class="nav-item">
-      <%= link_to actors_path,
-          class: "nav-link",
-          style: "color: white; padding: 0.6rem 0.75rem; display: block; text-decoration: none; #{current_page?(actors_path) ? 'background: rgba(255, 255, 255, 0.2);' : ''}" do %>
-        <i class="bi bi-person me-2"></i>Manage Actors
-      <% end %>
-    </li>
-    <li class="nav-item">
       <%= link_to series_index_path,
           class: "nav-link",
           style: "color: white; padding: 0.6rem 0.75rem; display: block; text-decoration: none; #{current_page?(series_index_path) ? 'background: rgba(255, 255, 255, 0.2);' : ''}" do %>

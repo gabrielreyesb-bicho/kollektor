@@ -61,7 +61,6 @@ begin
     'Genres' => Genre,
     'Countries' => Country,
     'Series' => Series,
-    'Actors' => Actor,
     'Notifications' => Notification
   }
   

@@ -45,18 +45,6 @@
             </div>
           <% end %>
           
-          <% if @series.actors.present? && @series.actors.any? %>
-            <div class="mb-3">
-              <strong>Cast & Crew:</strong>
-              <div class="row mt-2">
-                <% @series.actors.each do |actor| %>
-                  <div class="col-auto mb-2">
-                    <span class="badge bg-secondary"><%= actor.name %></span>
-                  </div>
-                <% end %>
-              </div>
-            </div>
-          <% end %>
         </div>
       </div>
     </div>

@@ -22,10 +22,4 @@ module Kollektor
     # Ensure Active Storage URLs use the correct host
     config.active_storage.resolve_model_to_route = :rails_storage_proxy
   end
-  puts "========================================"
-  puts "DATABASE_URL: #{ENV['DATABASE_URL']}"
-  puts "========================================"
-  puts "=== TODAS LAS VARIABLES ==="
-  ENV.each { |k, v| puts "#{k}: #{v}" if v.start_with?("postgres") }
-  puts "==========================="
 end

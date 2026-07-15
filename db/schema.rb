@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_06_08_162630) do
+ActiveRecord::Schema[7.1].define(version: 2026_07_14_120000) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -37,18 +37,6 @@ ActiveRecord::Schema[7.1].define(version: 2026_06_08_162630) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
-  end
-
-  create_table "actors", force: :cascade do |t|
-    t.string "name"
-    t.text "bio"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "actors_series", id: false, force: :cascade do |t|
-    t.integer "actor_id", null: false
-    t.integer "series_id", null: false
   end
 
   create_table "albums", force: :cascade do |t|
@@ -79,11 +67,6 @@ ActiveRecord::Schema[7.1].define(version: 2026_06_08_162630) do
     t.index ["genre_id"], name: "index_authors_on_genre_id"
     t.index ["name"], name: "index_authors_on_name"
     t.index ["user_id"], name: "index_authors_on_user_id"
-  end
-
-  create_table "authors_series", id: false, force: :cascade do |t|
-    t.integer "series_id", null: false
-    t.integer "author_id", null: false
   end
 
   create_table "collection_types", force: :cascade do |t|
@@ -136,23 +119,8 @@ ActiveRecord::Schema[7.1].define(version: 2026_06_08_162630) do
     t.text "comments"
     t.boolean "seen"
     t.string "imdb_id"
-    t.datetime "snoozed_at"
     t.index ["genre_id"], name: "index_series_on_genre_id"
     t.index ["user_id"], name: "index_series_on_user_id"
-  end
-
-  create_table "tv_shows", force: :cascade do |t|
-    t.string "name"
-    t.text "description"
-    t.integer "year"
-    t.integer "genre_id", null: false
-    t.integer "author_id", null: false
-    t.integer "user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["author_id"], name: "index_tv_shows_on_author_id"
-    t.index ["genre_id"], name: "index_tv_shows_on_genre_id"
-    t.index ["user_id"], name: "index_tv_shows_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -181,7 +149,4 @@ ActiveRecord::Schema[7.1].define(version: 2026_06_08_162630) do
   add_foreign_key "notifications", "users"
   add_foreign_key "series", "genres"
   add_foreign_key "series", "users"
-  add_foreign_key "tv_shows", "authors"
-  add_foreign_key "tv_shows", "genres"
-  add_foreign_key "tv_shows", "users"
 end

@@ -30,17 +30,6 @@
             </button>
           <% end %>
         <% end %>
-        <% if series.snoozed_at.present? %>
-          <%= button_to unsnooze_series_path(series), method: :patch, class: "btn btn-sm btn-outline-info ms-2", form: { data: { turbo: false } } do %>
-            <i class="bi bi-alarm"></i>
-            <span class="btn-label">Unsnooze</span>
-          <% end %>
-        <% else %>
-          <%= button_to snooze_series_path(series), method: :patch, class: "btn btn-sm btn-info ms-2", form: { data: { turbo: false } } do %>
-            <i class="bi bi-alarm"></i>
-            <span class="btn-label">Snooze</span>
-          <% end %>
-        <% end %>
       </div>
     </div>
   </div>

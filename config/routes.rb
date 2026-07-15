@@ -10,12 +10,6 @@ rescue => e
   [500, { 'Content-Type' => 'text/plain' }, ["Error: #{e.message}"]]
 end
 }
-  get 'actors/index'
-  get 'actors/new'
-  get 'actors/create'
-  get 'actors/edit'
-  get 'actors/update'
-  get 'actors/destroy'
   get 'series_collection/index'
   
   # Endpoints para exportar datos (antes de devise para evitar problemas de autenticación)
@@ -44,15 +38,8 @@ end
   get 'music/authors/:author_id', to: 'music#albums_mosaic', as: 'music_author'
   
   get 'series_collection', to: 'series_collection#index' # Series collection home
-  get 'tv_shows', to: redirect('/series_collection')
-  resources :series do
-    member do
-      patch :snooze
-      patch :unsnooze
-    end
-  end
-  resources :actors
-  
+  resources :series
+
   resources :genres
   resources :authors
   resources :albums

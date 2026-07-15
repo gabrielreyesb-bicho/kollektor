@@ -1,2 +1,0 @@
-module TvShowsHelper
-end

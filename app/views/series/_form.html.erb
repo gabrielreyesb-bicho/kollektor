@@ -40,7 +40,7 @@
   </div>
 
   <div class="row">
-    <div class="col-md-8">
+    <div class="col-12">
       <div class="mb-3">
         <%= form.label :name, class: "form-label" %>
         <%= form.text_field :name, 
@@ -101,15 +101,6 @@
         <img data-imdb-target="posterPreview" src="#" alt="Poster preview" style="display:none; max-width: 200px; margin-top: 10px;" />
       </div>
     </div>
-
-    <div class="col-md-4">
-      <div class="mb-3">
-        <%= form.label :actor_ids, "Cast & Crew", class: "form-label" %>
-        <%= form.collection_select :actor_ids, @actors, :id, :name, 
-            { prompt: "Select one or more actors" }, 
-            { multiple: true, data: { controller: 'tom-select' } } %>
-      </div>
-    </div>
   </div>
 
   <div class="d-flex justify-content-between">
@@ -117,25 +108,3 @@
     <%= form.submit class: "btn btn-primary" %>
   </div>
 <% end %>
-
-<script>
-function addCastMember() {
-  const container = document.getElementById('cast-container');
-  const castMember = document.createElement('div');
-  castMember.className = 'cast-member mb-2';
-  castMember.innerHTML = `
-    <div class="input-group">
-      <input type="text" name="series[cast][][name]" class="form-control" placeholder="Actor/Actress name">
-      <input type="text" name="series[cast][][role]" class="form-control" placeholder="Role">
-      <button type="button" class="btn btn-outline-danger remove-cast" onclick="removeCastMember(this)">
-        <i class="bi bi-trash"></i>
-      </button>
-    </div>
-  `;
-  container.appendChild(castMember);
-}
-
-function removeCastMember(button) {
-  button.closest('.cast-member').remove();
-}
-</script> 
