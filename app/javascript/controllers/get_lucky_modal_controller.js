@@ -1,47 +1,48 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Persists the Get Lucky suggestions modal across page reloads (e.g. when the
-// user switches to another app on mobile and comes back, the browser may reload
-// the page). The exact suggestions and the open state are kept in sessionStorage
-// so the same albums reappear, and the modal only closes when the user taps the X.
-const STORAGE_KEY = "getLuckyModalOpen"
-
+// Modal de sugerencias "Get Lucky".
+//
+// Este modal NO se abre solo. Antes se guardaba su contenido en sessionStorage
+// para reabrirlo tras una recarga, pero eso podía dejar la app inutilizable: si
+// el modal se restauraba y algo fallaba después, no había forma de salir — la
+// única navegación visible queda tapada por el overlay. Un modal que se abre
+// solo tiene que poder cerrarse siempre, y no vale la pena arriesgar la app
+// entera por conservar cuatro sugerencias entre recargas.
 export default class extends Controller {
   static targets = ["modal", "frame", "suggestions", "emptyMessage"]
 
   connect() {
-    // Save the rendered suggestions once the frame finishes loading while open
-    this.onFrameLoad = this.saveIfOpen.bind(this)
-    this.frameTarget.addEventListener("turbo:frame-load", this.onFrameLoad)
+    this.onKeydown = this.closeOnEscape.bind(this)
+    document.addEventListener("keydown", this.onKeydown)
 
-    // Liking, dismissing or deleting an album updates the modal through a Turbo
-    // Stream, which never fires turbo:frame-load. Without this the saved copy
-    // would go stale and a reload would bring back albums already removed.
-    this.onStreamRender = () => requestAnimationFrame(() => this.syncAfterChange())
+    // Borrar o descartar un álbum llega por Turbo Stream, que no dispara
+    // turbo:frame-load; sin esto el mensaje de "no quedan sugerencias" nunca
+    // aparecería.
+    this.onStreamRender = () => requestAnimationFrame(() => this.updateEmptyState())
     document.addEventListener("turbo:before-stream-render", this.onStreamRender)
 
-    // Reopen the modal if it was open before a reload
-    this.restore()
+    // Restos de la versión anterior: si quedó estado guardado de una sesión
+    // previa, tirarlo para que nadie herede un modal atascado.
+    this.clearLegacyState()
   }
 
   disconnect() {
-    this.frameTarget.removeEventListener("turbo:frame-load", this.onFrameLoad)
+    document.removeEventListener("keydown", this.onKeydown)
     document.removeEventListener("turbo:before-stream-render", this.onStreamRender)
+    document.body.style.overflow = ""
   }
 
   open() {
-    // Reset the frame src to force a fresh load each time
+    // Reset del src para forzar una tirada nueva en cada apertura
     this.frameTarget.src = this.frameTarget.dataset.src
-    this.show()
-    // State is saved on turbo:frame-load once the suggestions arrive
+    this.modalTarget.classList.add("show")
+    document.body.style.overflow = "hidden"
   }
 
   close() {
     this.modalTarget.classList.remove("show")
     document.body.style.overflow = ""
-    // Clear the frame so next open fetches fresh results
     this.frameTarget.src = ""
-    this.clearState()
   }
 
   closeOnBackdrop(event) {
@@ -50,23 +51,17 @@ export default class extends Controller {
     }
   }
 
+  closeOnEscape(event) {
+    if (event.key === "Escape" && this.modalTarget.classList.contains("show")) {
+      this.close()
+    }
+  }
+
   stopPropagation(event) {
     event.stopPropagation()
   }
 
-  // --- persistence helpers ---
-
-  show() {
-    this.modalTarget.classList.add("show")
-    document.body.style.overflow = "hidden"
-  }
-
-  syncAfterChange() {
-    this.updateEmptyState()
-    this.saveIfOpen()
-  }
-
-  // Removing every suggestion would otherwise leave the modal blank
+  // Quitar todas las sugerencias dejaría el modal en blanco
   updateEmptyState() {
     if (!this.hasEmptyMessageTarget || !this.hasSuggestionsTarget) return
 
@@ -74,34 +69,11 @@ export default class extends Controller {
     this.emptyMessageTarget.classList.toggle("d-none", !empty)
   }
 
-  saveIfOpen() {
-    if (!this.modalTarget.classList.contains("show")) return
+  clearLegacyState() {
     try {
-      sessionStorage.setItem(STORAGE_KEY, this.frameTarget.innerHTML)
+      sessionStorage.removeItem("getLuckyModalOpen")
     } catch (e) {
-      // sessionStorage may be unavailable (private mode); persistence is best-effort
-    }
-  }
-
-  restore() {
-    let html
-    try {
-      html = sessionStorage.getItem(STORAGE_KEY)
-    } catch (e) {
-      return
-    }
-    if (!html) return
-
-    // Inject the saved suggestions without re-fetching (keeps the same albums)
-    this.frameTarget.innerHTML = html
-    this.show()
-  }
-
-  clearState() {
-    try {
-      sessionStorage.removeItem(STORAGE_KEY)
-    } catch (e) {
-      // ignore
+      // sessionStorage puede no existir (modo privado); da igual
     }
   }
 }
