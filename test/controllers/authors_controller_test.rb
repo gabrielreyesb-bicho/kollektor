@@ -1,8 +1,13 @@
 require "test_helper"
 
 class AuthorsControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+
   setup do
-    @author = authors(:one)
+    @user   = users(:one)
+    @author = authors(:one)        # pertenece a @user
+    @other  = authors(:two)        # pertenece a users(:two)
+    sign_in @user
   end
 
   test "should get index" do
@@ -17,10 +22,15 @@ class AuthorsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create author" do
     assert_difference("Author.count") do
-      post authors_url, params: { author: { description: @author.description, genre_id: @author.genre_id, name: @author.name } }
+      post authors_url, params: { author: {
+        name: "Gentle Giant",
+        description: @author.description,
+        genre_id: @author.genre_id,
+        country_id: countries(:uk).id
+      } }
     end
 
-    assert_redirected_to author_url(Author.last)
+    assert_redirected_to authors_path
   end
 
   test "should show author" do
@@ -34,8 +44,10 @@ class AuthorsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update author" do
-    patch author_url(@author), params: { author: { description: @author.description, genre_id: @author.genre_id, name: @author.name } }
-    assert_redirected_to author_url(@author)
+    patch author_url(@author), params: { author: { name: "Renamed Author" } }
+
+    assert_redirected_to authors_path
+    assert_equal "Renamed Author", @author.reload.name
   end
 
   test "should destroy author" do
@@ -43,6 +55,13 @@ class AuthorsControllerTest < ActionDispatch::IntegrationTest
       delete author_url(@author)
     end
 
-    assert_redirected_to authors_url
+    assert_redirected_to authors_path
+  end
+
+  test "no puedes tocar el autor de otro usuario" do
+    delete author_url(@other)
+
+    assert_response :not_found
+    assert Author.exists?(@other.id)
   end
 end

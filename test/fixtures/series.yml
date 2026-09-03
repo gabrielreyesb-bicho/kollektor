@@ -1,13 +1,13 @@
 one:
-  name: Author One
+  name: Series One
   description: MyText
+  year: 2020
   genre: one
-  country: mexico
   user: one
 
 two:
-  name: Author Two
+  name: Series Two
   description: MyText
+  year: 2021
   genre: two
-  country: uk
   user: two
