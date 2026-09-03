@@ -15,7 +15,6 @@ class GenresController < ApplicationController
   end
 
   def show
-    authorize_genre_access
   end
 
   def new
@@ -25,7 +24,6 @@ class GenresController < ApplicationController
   end
 
   def edit
-    authorize_genre_access
     set_collection_context
   end
 
@@ -39,8 +37,6 @@ class GenresController < ApplicationController
   end
 
   def update
-    authorize_genre_access
-
     Rails.logger.info "=== GENRE UPDATE DEBUG ==="
     Rails.logger.info "Genre ID: #{@genre.id}"
     Rails.logger.info "Params received: #{genre_params.inspect}"
@@ -60,7 +56,6 @@ class GenresController < ApplicationController
   end
 
   def destroy
-    authorize_genre_access
     @genre.destroy!
     redirect_to genres_url, status: :see_other, notice: 'Genre was successfully destroyed.'
   end
@@ -79,15 +74,12 @@ class GenresController < ApplicationController
       @title = @collection_type == 'Series' ? 'Series & Movies Collection' : 'Music Collection'
     end
 
+    # Scoped al dueño: un género de otro usuario no existe para esta sesión.
+    # Importante porque Genre cascadea a authors/albums/series con
+    # dependent: :destroy — un destroy no autorizado se llevaba la colección
+    # entera del otro usuario.
     def set_genre
-      @genre = Genre.find(params[:id])
-    end
-
-    def authorize_genre_access
-      unless @genre.user == current_user
-        flash[:alert] = "You are not authorized to access this genre"
-        redirect_to genres_path
-      end
+      @genre = current_user.genres.find(params[:id])
     end
 
     def genre_params

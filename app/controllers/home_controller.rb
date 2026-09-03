@@ -39,10 +39,7 @@ class HomeController < ApplicationController
   end
 
   def get_random_recommendations
-    current_user.albums.includes(:author, :genre).with_attached_cover_image
-                .suggestions_order
-                .limit(4)
-                .to_a
+    current_user.albums.random_suggestions.to_a
   end
 
   def get_title

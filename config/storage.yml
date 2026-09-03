@@ -17,3 +17,7 @@ minio:
   bucket: <%= ENV['MINIO_BUCKET'] %>
   endpoint: <%= ENV['MINIO_ENDPOINT'] %>
   force_path_style: true
+
+test:
+  service: Disk
+  root: <%= Rails.root.join("tmp/storage") %>

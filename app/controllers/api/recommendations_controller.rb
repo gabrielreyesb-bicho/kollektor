@@ -12,7 +12,8 @@ class Api::RecommendationsController < ApplicationController
       @random_selection = true
     else
       @genre = Genre.find(params[:id])
-      @recommended_albums = current_user.albums.joins(:author)  # Join with authors to sort by author name
+      @recommended_albums = current_user.albums.suggestable
+                               .joins(:author)  # Join with authors to sort by author name
                                .where(genre_id: @genre.id)
                                .includes(:author, :genre)
                                .order('authors.name ASC, albums.year ASC')
@@ -35,9 +36,6 @@ class Api::RecommendationsController < ApplicationController
   private
 
   def get_random_recommendations
-    current_user.albums.includes(:author, :genre).with_attached_cover_image
-                .suggestions_order
-                .limit(4)
-                .to_a
+    current_user.albums.random_suggestions.to_a
   end
 end 

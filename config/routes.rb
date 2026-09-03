@@ -42,7 +42,16 @@ end
 
   resources :genres
   resources :authors
-  resources :albums
+  resources :albums do
+    collection do
+      get 'search_info'
+    end
+    member do
+      # Saca/devuelve el álbum a las sugerencias de Get Lucky sin borrarlo.
+      patch 'dismiss'
+      patch 'restore'
+    end
+  end
   resources :countries
 
   # Get Lucky functionality - direct access to random recommendations
@@ -61,12 +70,6 @@ end
     get 'recommendations/by_genre/:id', to: 'recommendations#by_genre'
     resources :albums, only: [] do
       post 'rate', to: 'ratings#create'
-    end
-  end
-
-  resources :albums do
-    collection do
-      get 'search_info'
     end
   end
 

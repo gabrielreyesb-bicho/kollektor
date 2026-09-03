@@ -36,3 +36,6 @@
 
 # Ignore local sqlite database files accidentally tracked
 kollektor_development*
+
+# Bases de datos de los workers paralelos de tests
+kollektor_test-*

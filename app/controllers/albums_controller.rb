@@ -2,7 +2,7 @@ class AlbumsController < ApplicationController
   include MusicSidebarData
 
   skip_before_action :load_music_sidebar_data
-  before_action :set_album, only: %i[ show edit update destroy ]
+  before_action :set_album, only: %i[ show edit update destroy dismiss restore ]
   before_action :load_dependencies, only: %i[ new edit create update ]
   before_action :load_sidebar_data, only: %i[ index show ]
 
@@ -22,7 +22,6 @@ class AlbumsController < ApplicationController
   end
 
   def show
-    authorize_album_access
   end
 
   def new
@@ -30,7 +29,6 @@ class AlbumsController < ApplicationController
   end
 
   def edit
-    authorize_album_access
   end
 
   def create
@@ -64,7 +62,6 @@ class AlbumsController < ApplicationController
   end
 
   def update
-    authorize_album_access
     if @album.update(album_params)
       redirect_to albums_path
     else
@@ -74,9 +71,29 @@ class AlbumsController < ApplicationController
   end
 
   def destroy
-    authorize_album_access
     @album.destroy!
-    redirect_to albums_url, status: :see_other
+
+    if from_get_lucky?
+      render turbo_stream: remove_suggestion_stream
+    else
+      redirect_to albums_url, status: :see_other
+    end
+  end
+
+  # Saca el álbum de las sugerencias de Get Lucky sin borrarlo de la colección.
+  def dismiss
+    @album.dismiss!
+
+    if from_get_lucky?
+      render turbo_stream: remove_suggestion_stream
+    else
+      redirect_back fallback_location: album_path(@album), status: :see_other
+    end
+  end
+
+  def restore
+    @album.restore!
+    redirect_back fallback_location: album_path(@album), status: :see_other
   end
 
   def search_info
@@ -96,15 +113,20 @@ class AlbumsController < ApplicationController
   end
 
   private
+    # Scoped al dueño: un álbum de otro usuario simplemente no existe para esta
+    # sesión (404), en vez de cargarse y depender de un chequeo posterior.
     def set_album
-      @album = Album.find(params[:id])
+      @album = current_user.albums.find(params[:id])
     end
 
-    def authorize_album_access
-      unless @album.user == current_user
-        flash[:alert] = "You are not authorized to access this album"
-        redirect_to albums_path
-      end
+    # Get Lucky vive en un modal dentro de un turbo frame: ahí la respuesta es
+    # un stream que quita la tarjeta, no una redirección que cerraría el modal.
+    def from_get_lucky?
+      params[:from] == "get_lucky"
+    end
+
+    def remove_suggestion_stream
+      turbo_stream.remove("lucky_album_#{@album.id}")
     end
 
     def load_sidebar_data

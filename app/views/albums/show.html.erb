@@ -33,6 +33,16 @@
         </span>
       </p>
 
+      <!-- Descartado desde Get Lucky: sigue en la colección, ya no se sugiere -->
+      <% if @album.dismissed? %>
+        <p class="lead mb-4">
+          <span class="badge bg-warning text-dark fs-6">
+            <i class="bi bi-eye-slash me-2"></i>
+            Hidden from Get Lucky
+          </span>
+        </p>
+      <% end %>
+
       <!-- Description -->
       <% if @album.description.present? %>
         <h5 class="mb-3">About this album</h5>
@@ -40,9 +50,25 @@
       <% end %>
 
       <!-- Action Buttons -->
-      <div class="d-flex gap-2 mt-5">
+      <div class="d-flex gap-2 mt-5 flex-wrap">
         <%= link_to 'Back', albums_path, class: 'btn btn-secondary' %>
         <%= link_to 'Edit', edit_album_path(@album), class: 'btn btn-primary' %>
+
+        <% if @album.dismissed? %>
+          <%= button_to restore_album_path(@album),
+              method: :patch,
+              class: 'btn btn-outline-light' do %>
+            <i class="bi bi-arrow-counterclockwise me-2"></i>
+            Suggest again
+          <% end %>
+        <% else %>
+          <%= button_to dismiss_album_path(@album),
+              method: :patch,
+              class: 'btn btn-outline-secondary' do %>
+            <i class="bi bi-eye-slash me-2"></i>
+            Stop suggesting
+          <% end %>
+        <% end %>
       </div>
     </div>
   </div>

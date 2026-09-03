@@ -7,12 +7,18 @@ import { Controller } from "@hotwired/stimulus"
 const STORAGE_KEY = "getLuckyModalOpen"
 
 export default class extends Controller {
-  static targets = ["modal", "frame"]
+  static targets = ["modal", "frame", "suggestions", "emptyMessage"]
 
   connect() {
     // Save the rendered suggestions once the frame finishes loading while open
     this.onFrameLoad = this.saveIfOpen.bind(this)
     this.frameTarget.addEventListener("turbo:frame-load", this.onFrameLoad)
+
+    // Liking, dismissing or deleting an album updates the modal through a Turbo
+    // Stream, which never fires turbo:frame-load. Without this the saved copy
+    // would go stale and a reload would bring back albums already removed.
+    this.onStreamRender = () => requestAnimationFrame(() => this.syncAfterChange())
+    document.addEventListener("turbo:before-stream-render", this.onStreamRender)
 
     // Reopen the modal if it was open before a reload
     this.restore()
@@ -20,6 +26,7 @@ export default class extends Controller {
 
   disconnect() {
     this.frameTarget.removeEventListener("turbo:frame-load", this.onFrameLoad)
+    document.removeEventListener("turbo:before-stream-render", this.onStreamRender)
   }
 
   open() {
@@ -52,6 +59,19 @@ export default class extends Controller {
   show() {
     this.modalTarget.classList.add("show")
     document.body.style.overflow = "hidden"
+  }
+
+  syncAfterChange() {
+    this.updateEmptyState()
+    this.saveIfOpen()
+  }
+
+  // Removing every suggestion would otherwise leave the modal blank
+  updateEmptyState() {
+    if (!this.hasEmptyMessageTarget || !this.hasSuggestionsTarget) return
+
+    const empty = this.suggestionsTarget.querySelectorAll(".lucky-suggestion").length === 0
+    this.emptyMessageTarget.classList.toggle("d-none", !empty)
   }
 
   saveIfOpen() {

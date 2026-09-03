@@ -35,6 +35,31 @@ class Album < ApplicationRecord
     order(:likes_count).order(Arel.sql(random_fn))
   }
 
+  # Álbumes que aún pueden salir en "Get Lucky". Un álbum descartado sigue en
+  # la colección (aparece en Albums, Music y estadísticas), solo deja de
+  # sugerirse.
+  scope :suggestable, -> { where(dismissed_at: nil) }
+
+  # Fuente única de las sugerencias aleatorias. La usan Get Lucky y el mood
+  # prompt diario; antes cada uno tenía su propia copia y era fácil que se
+  # separaran (p. ej. que uno respetara los descartes y el otro no).
+  scope :random_suggestions, ->(count = 4) {
+    suggestable.includes(:author, :genre).with_attached_cover_image
+               .suggestions_order.limit(count)
+  }
+
+  def dismissed?
+    dismissed_at.present?
+  end
+
+  def dismiss!
+    update!(dismissed_at: Time.current)
+  end
+
+  def restore!
+    update!(dismissed_at: nil)
+  end
+
   def increment_likes
     self.class.increment_counter(:likes_count, id)
     reload

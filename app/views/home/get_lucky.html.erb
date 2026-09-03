@@ -1,55 +1,90 @@
 <%= turbo_frame_tag "get_lucky_frame" do %>
   <% if @recommended_albums.any? %>
-    <div class="d-flex flex-column gap-3">
+    <div class="d-flex flex-column gap-3" data-get-lucky-modal-target="suggestions">
       <% @recommended_albums.each do |album| %>
-        <div class="d-flex gap-3 align-items-start">
-          <!-- Cover -->
-          <div style="flex-shrink: 0; width: 80px; height: 80px;">
-            <%= link_to album_path(album) do %>
-              <% if album.cover_image.attached? %>
-                <%= image_tag album.cover_image, style: "width: 80px; height: 80px; object-fit: cover; border-radius: 6px;" %>
-              <% else %>
-                <div class="d-flex align-items-center justify-content-center rounded" style="width: 80px; height: 80px; background: var(--dark-hover);">
-                  <i class="bi bi-disc text-muted" style="font-size: 2rem;"></i>
-                </div>
-              <% end %>
-            <% end %>
-          </div>
-
-          <!-- Info -->
-          <div class="flex-grow-1 overflow-hidden">
-            <%= link_to album_path(album), class: "text-white text-decoration-none" do %>
-              <div class="fw-semibold text-truncate"><%= album.name %></div>
-            <% end %>
-            <div class="text-muted small text-truncate"><%= album.author.name %></div>
-            <div class="text-muted small"><%= album.genre.name %> · <%= album.year %></div>
-
-            <div class="d-flex gap-1 mt-2">
-              <div id="like-button-<%= album.id %>">
-                <%= button_to api_album_rate_path(album),
-                    method: :post,
-                    class: "btn btn-sm btn-outline-danger",
-                    form: { data: { turbo: true }, class: "d-inline-block" },
-                    params: {
-                      random_selection: @random_selection,
-                      recommended_ids: @recommended_albums.map(&:id).join(',')
-                    } do %>
-                  <i class="bi bi-hand-thumbs-up-fill"></i>
-                  <span class="ms-1"><%= album.likes_count %></span>
-                <% end %>
-              </div>
-
-              <% if album.youtube_music_url.present? %>
-                <%= link_to album.youtube_music_url, class: "btn btn-sm btn-danger", target: "_blank", data: { turbo: false } do %>
-                  <i class="bi bi-youtube"></i>
+        <div id="lucky_album_<%= album.id %>" class="lucky-suggestion">
+          <div class="d-flex gap-3 align-items-start">
+            <!-- Cover -->
+            <div style="flex-shrink: 0; width: 80px; height: 80px;">
+              <%= link_to album_path(album) do %>
+                <% if album.cover_image.attached? %>
+                  <%= image_tag album.cover_image, style: "width: 80px; height: 80px; object-fit: cover; border-radius: 6px;" %>
+                <% else %>
+                  <div class="d-flex align-items-center justify-content-center rounded" style="width: 80px; height: 80px; background: var(--dark-hover);">
+                    <i class="bi bi-disc text-muted" style="font-size: 2rem;"></i>
+                  </div>
                 <% end %>
               <% end %>
             </div>
+
+            <!-- Info -->
+            <div class="flex-grow-1 overflow-hidden">
+              <%= link_to album_path(album), class: "text-white text-decoration-none" do %>
+                <div class="fw-semibold text-truncate"><%= album.name %></div>
+              <% end %>
+              <div class="text-muted small text-truncate"><%= album.author.name %></div>
+              <div class="text-muted small"><%= album.genre.name %> · <%= album.year %></div>
+
+              <div class="d-flex gap-1 mt-2">
+                <div id="like-button-<%= album.id %>">
+                  <%= button_to api_album_rate_path(album),
+                      method: :post,
+                      class: "btn btn-sm btn-outline-danger",
+                      form: { data: { turbo: true }, class: "d-inline-block" },
+                      params: {
+                        random_selection: @random_selection,
+                        recommended_ids: @recommended_albums.map(&:id).join(',')
+                      } do %>
+                    <i class="bi bi-hand-thumbs-up-fill"></i>
+                    <span class="ms-1"><%= album.likes_count %></span>
+                  <% end %>
+                </div>
+
+                <% if album.youtube_music_url.present? %>
+                  <%= link_to album.youtube_music_url, class: "btn btn-sm btn-danger", target: "_blank", data: { turbo: false } do %>
+                    <i class="bi bi-youtube"></i>
+                  <% end %>
+                <% end %>
+
+                <!-- No me gustó: se queda en la colección, deja de sugerirse -->
+                <%= button_to dismiss_album_path(album),
+                    method: :patch,
+                    class: "btn btn-sm btn-outline-secondary",
+                    title: "Not for me — stop suggesting this album",
+                    "aria-label": "Stop suggesting this album",
+                    form: { data: { turbo: true }, class: "d-inline-block" },
+                    params: { from: "get_lucky" } do %>
+                  <i class="bi bi-hand-thumbs-down"></i>
+                <% end %>
+
+                <!-- Borrar de la colección (p. ej. álbumes que no existen) -->
+                <%= button_to album_path(album),
+                    method: :delete,
+                    class: "btn btn-sm btn-outline-danger",
+                    title: "Delete this album from the collection",
+                    "aria-label": "Delete this album from the collection",
+                    form: {
+                      data: {
+                        turbo: true,
+                        turbo_confirm: "Delete \"#{album.name}\" from your collection? This can't be undone."
+                      },
+                      class: "d-inline-block"
+                    },
+                    params: { from: "get_lucky" } do %>
+                  <i class="bi bi-trash"></i>
+                <% end %>
+              </div>
+            </div>
           </div>
+          <hr class="border-secondary my-0 mt-3">
         </div>
-        <hr class="border-secondary my-0">
       <% end %>
     </div>
+
+    <!-- Se muestra si quitas todas las sugerencias sin cerrar el modal -->
+    <p class="text-muted mb-0 d-none" data-get-lucky-modal-target="emptyMessage">
+      No suggestions left. Close and reopen Get Lucky for a new batch.
+    </p>
   <% else %>
     <p class="text-muted">No albums found. Add some to your collection first.</p>
   <% end %>
